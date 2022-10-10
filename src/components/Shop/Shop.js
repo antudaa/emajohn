@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 import { addToDb, getStoredCart } from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
@@ -6,14 +7,15 @@ import './Shop.css';
 
 const Shop = () => {
 
-    const [products, setProducts] = useState([]);
+    const products = useLoaderData();
+    // const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
 
-    useEffect( () => {
-        fetch('products.json')
-            .then(res => res.json())
-            .then(data => setProducts(data));
-    } , []);
+    // useEffect( () => {
+    //     fetch('products.json')
+    //         .then(res => res.json())
+    //         .then(data => setProducts(data));
+    // } , []);
 
     // useEffect To Show if any previous data exists in localStorage.
     useEffect(() => {
@@ -58,20 +60,6 @@ const Shop = () => {
 
     }
 
-
-    // Finding The Infos.
-    let totalPrice = 0;
-    let shippingPrice = 0;
-    let productQuantity = 0;
-    for(const product of cart){
-        productQuantity = productQuantity + product.quantity;
-        totalPrice = totalPrice + (product.price * product.quantity);
-        shippingPrice = shippingPrice + product.shipping;
-    }
-    let tax = (totalPrice * 0.1).toFixed(2);
-    let grandTotal = totalPrice + shippingPrice + parseFloat(tax);
-
-
     return (
         <div className='shop-container'>
             <div className="product-container">
@@ -84,7 +72,7 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container">
-                <Cart cart = {cart} price = {totalPrice} quantity = {productQuantity} shipping = {shippingPrice} tax = {tax} grandTotal = {grandTotal}></Cart>
+                <Cart cart = {cart} ></Cart>
             </div>
         </div>
     );
